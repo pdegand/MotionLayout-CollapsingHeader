@@ -13,12 +13,13 @@ class MainActivity : AppCompatActivity() {
     setContentView(R.layout.activity_main)
 
     toggleButton.setOnClickListener {
-      when(val currentState = motionLayout.currentState) {
+      when (val currentState = motionLayout.currentState) {
         R.id.headerHidden -> {
           motionLayout.setTransition(R.id.headerHidden, R.id.headerExpanded)
-          motionLayout.setTransitionListener(object: TransitionAdapter() {
+          motionLayout.setTransitionListener(object : TransitionAdapter() {
             override fun onTransitionCompleted(motionLayout: MotionLayout, currentId: Int) {
               motionLayout.setTransitionListener(null)
+              motionLayout.progress = 0f
               motionLayout.setTransition(R.id.headerExpanded, R.id.headerCollapsed)
             }
           })
@@ -29,6 +30,15 @@ class MainActivity : AppCompatActivity() {
           motionLayout.transitionToEnd()
         }
       }
+    }
+  }
+
+  private fun logState(state: Int): String {
+    return when (state) {
+      R.id.headerHidden -> "HIDDEN"
+      R.id.headerExpanded -> "EXPANDED"
+      R.id.headerCollapsed -> "COLLAPSED"
+      else -> "UNKNOWN"
     }
   }
 }
